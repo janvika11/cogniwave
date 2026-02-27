@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CogniWave Dashboard</title>
+<!-- Load Tailwind CSS v3 with required plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Load FontAwesome for Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Custom CSS -->
+<link href="dashboard.css" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script src="tailwind-config.js"></script>
+<!-- Centralized Navigation -->
+<script src="navbar.js"></script>
+</head>
+<body class="bg-bg text-gray-800 font-sans min-h-screen p-6 overflow-x-hidden pt-28">
+<!-- Navigation Container -->
+<div id="navbar-container"></div>
+<!-- BEGIN: Main Grid -->
+<main class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- BEGIN: Column 1 (Left - Hero Section) -->
+<section class="lg:col-span-5 flex flex-col gap-6">
+<!-- Headline -->
+<div>
+<h2 class="font-bold text-primary leading-tight text-5xl">Hello, Sai Charan!</h2>
+<p class="text-gray-500 text-lg mt-1">How are you feeling today?</p>
+</div>
+<!-- Central 3D Illustration Area -->
+<div class="relative flex-grow min-h-[300px] flex items-start justify-center pt-8">
+<!-- Video Container with White Background -->
+<div class="relative bg-gradient-to-br from-pink-50 to-purple-50 rounded-3xl shadow-lg w-full max-w-[500px] h-[400px] flex items-center justify-center overflow-hidden">
+<!-- Heart Video - Toggle size by changing 'object-cover' to 'object-contain' -->
+<video id="heartVideo" autoplay loop muted playsinline class="w-full h-full object-cover z-10" style="background: transparent; transform: scale(1.2);">
+<source src="heart-video.mp4" type="video/mp4">
+Your browser does not support the video tag.
+</video>
+</div>
+</div>
+<!-- Quick Stats Row -->
+<div class="grid grid-cols-3 gap-4">
+<!-- Heart Rate Card -->
+<div class="bg-white p-6 rounded-2xl shadow-soft hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between min-h-[140px]">
+<div class="flex items-center justify-between mb-3">
+<div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+<i class="fas fa-heartbeat text-red-500 text-lg"></i>
+</div>
+<span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">Normal</span>
+</div>
+<div class="mt-2">
+<h4 class="text-3xl font-bold text-gray-900" id="quickHeartRate">72</h4>
+<p class="text-sm text-gray-500 mt-1">Heart Rate (bpm)</p>
+</div>
+</div>
+<!-- Blood Pressure Card -->
+<div class="bg-white p-6 rounded-2xl shadow-soft hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between min-h-[140px]">
+<div class="flex items-center justify-between mb-3">
+<div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+<i class="fas fa-tint text-blue-500 text-lg"></i>
+</div>
+<span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">Good</span>
+</div>
+<div class="mt-2">
+<h4 class="text-3xl font-bold text-gray-900">120/80</h4>
+<p class="text-sm text-gray-500 mt-1">Blood Pressure</p>
+</div>
+</div>
+<!-- Temperature Card -->
+<div class="bg-white p-6 rounded-2xl shadow-soft hover:shadow-lg transition-all cursor-pointer flex flex-col justify-between min-h-[140px]">
+<div class="flex items-center justify-between mb-3">
+<div class="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+<i class="fas fa-thermometer-half text-orange-500 text-lg"></i>
+</div>
+<span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">Normal</span>
+</div>
+<div class="mt-2">
+<h4 class="text-3xl font-bold text-gray-900" id="quickTemp">98.6</h4>
+<p class="text-sm text-gray-500 mt-1">Temperature (°F)</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Column 1 -->
+<!-- BEGIN: Column 2 (Middle - Health Data) -->
+<section class="lg:col-span-3 flex flex-col gap-8">
+<!-- Monthly Chats Card -->
+<div class="bg-white p-6 rounded-3xl shadow-soft h-64 flex flex-col">
+<div class="flex justify-between items-center mb-4">
+<h3 class="font-bold text-lg text-gray-900">Monthly Chats</h3>
+<button id="visitsPeriodSelector" class="flex items-center bg-gray-100 rounded-full px-3 py-1 text-xs font-medium text-gray-600 hover:bg-gray-200 transition-colors cursor-pointer">
+                        <span id="visitsPeriodText">by month</span> <i class="fas fa-chevron-down ml-2 text-blue-900"></i>
+</button>
+</div>
+<div class="flex-grow w-full h-full overflow-hidden rounded-lg relative">
+<svg id="visitsChart" class="w-full h-full" viewBox="0 0 400 200">
+<defs>
+<linearGradient id="visitsGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#3B82F6" stop-opacity="0.6"></stop>
+<stop offset="100%" stop-color="#3B82F6" stop-opacity="0"></stop>
+</linearGradient>
+</defs>
+<path id="visitsAreaPath" d="M0,150 C50,140 100,100 150,110 S250,150 300,100 S350,50 400,80 V200 H0 Z" fill="url(#visitsGradient)"></path>
+<path id="visitsLinePath" d="M0,150 C50,140 100,100 150,110 S250,150 300,100 S350,50 400,80" fill="none" stroke="#3B82F6" stroke-linecap="round" stroke-width="3"></path>
+<g id="visitsDataPoints"></g>
+</svg>
+<div id="visitsTooltip" class="absolute hidden bg-white rounded-lg shadow-lg px-3 py-2 text-xs pointer-events-none z-10">
+<div class="font-bold text-gray-900"></div>
+<div class="text-gray-500"></div>
+</div>
+</div>
+</div>
+<!-- Medication List Card -->
+<div class="bg-white p-6 rounded-3xl shadow-soft flex-grow">
+<h3 class="font-bold text-lg text-gray-900 mb-4">Medication list</h3>
+<div class="space-y-3">
+<!-- Med Item 1 -->
+<div class="bg-gray-50 p-3 rounded-2xl flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-blue-500">
+<i class="fas fa-capsules"></i>
+</div>
+<div>
+<h4 class="font-bold text-sm text-gray-800">B12</h4>
+<p class="text-xs text-gray-500">460 mg</p>
+</div>
+</div>
+<div class="text-xs text-gray-400 font-medium">21 Sep - 25 Sep</div>
+</div>
+<!-- Med Item 2 (Active) -->
+<div class="bg-primary p-3 rounded-2xl flex items-center justify-between text-white shadow-lg shadow-primary/20 medication-item" data-time="14">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-dark flex items-center justify-center text-white">
+<i class="fas fa-pills"></i>
+</div>
+<div>
+<h4 class="font-bold text-sm">Verapamil</h4>
+<p class="text-xs text-blue-200">460 mg</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-xs text-blue-200">21 Sep - Until oct</div>
+<div class="text-[10px] text-blue-300">checc op</div>
+</div>
+</div>
+<!-- Med Item 3 -->
+<div class="bg-gray-50 p-3 rounded-2xl flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-blue-500">
+<i class="fas fa-tablets"></i>
+</div>
+<div>
+<h4 class="font-bold text-sm text-gray-800">Ibuprofen</h4>
+<p class="text-xs text-gray-500">400 mg</p>
+</div>
+</div>
+<div class="text-xs text-gray-400 font-medium">As needed for pain</div>
+</div>
+<!-- Med Item 4 -->
+<div class="bg-gray-50 p-3 rounded-2xl flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-blue-500">
+<i class="fas fa-tablets"></i>
+</div>
+<div>
+<h4 class="font-bold text-sm text-gray-800">Aspirin</h4>
+<p class="text-xs text-gray-500">300 mg</p>
+</div>
+</div>
+<div class="text-xs text-gray-400 font-medium">21 Sep - 25 Sep</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Column 2 -->
+<!-- BEGIN: Column 3 (Right - Schedule & Vitals) -->
+<section class="lg:col-span-4 flex flex-col gap-6">
+<!-- Vitals Card -->
+<div class="bg-white p-6 rounded-3xl shadow-soft h-48 flex flex-col">
+<div class="flex justify-between items-center mb-2">
+<h3 class="font-bold text-lg text-gray-900">Vital Signs</h3>
+<div class="w-6 h-6 rounded-full bg-primary-light text-primary flex items-center justify-center text-xs">
+<i class="fas fa-arrow-up rotate-45"></i>
+</div>
+</div>
+<div class="flex-grow w-full h-full overflow-hidden rounded-lg">
+<svg class="w-full h-full" viewbox="0 0 300 150"><path d="M0,100 C40,90 80,110 120,80 S200,60 300,90" fill="none" stroke="#EF4444" stroke-dasharray="6 4" stroke-width="2"></path><path d="M0,120 C40,110 80,80 120,90 S200,40 300,70" fill="none" stroke="#3B82F6" stroke-width="3"></path><circle cx="120" cy="90" fill="white" r="4" stroke="#3B82F6" stroke-width="2"></circle><circle cx="200" cy="40" fill="white" r="4" stroke="#3B82F6" stroke-width="2"></circle></svg>
+</div>
+</div>
+<!-- Schedule Card -->
+<div class="bg-white p-6 rounded-3xl shadow-soft flex-grow">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-bold text-lg text-gray-900">Schedule</h3>
+<a href="schedule.html" class="text-xs text-primary font-semibold hover:underline flex items-center">
+    View All <i class="fas fa-chevron-right ml-1"></i>
+</a>
+</div>
+<p class="text-sm text-gray-500 mb-4">Chat history log with AI / Doctor</p>
+<!-- Date Strip -->
+<div id="dateStrip" class="flex justify-between mb-6">
+    <!-- Dates will be generated dynamically -->
+</div>
+<!-- Appointments List -->
+<div id="dashboardAppointments" class="space-y-4 max-h-96 overflow-y-auto">
+    <!-- Appointments will be loaded dynamically -->
+</div>
+<a href="schedule.html" class="block w-full mt-4 bg-primary text-white py-3 rounded-xl font-semibold hover:bg-primary-dark transition-colors text-center">
+    <i class="fas fa-plus mr-2"></i> Schedule Appointment
+</a>
+</div>
+</section>
+<!-- END: Column 3 -->
+</main>
+<!-- END: Main Grid -->
+
+<!-- Dashboard JavaScript -->
+<script src="dashboard.js"></script>
+</body></html>
